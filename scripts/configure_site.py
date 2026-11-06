@@ -24,17 +24,17 @@ def main():
         text=file.read_text(encoding='utf-8')
         rel=file.relative_to(ROOT).as_posix()
         url=base+('' if rel=='index.html' else rel)
-        image=base+'assets/images/'+('hero-ai.webp' if rel=='index.html' else 'facade-go-gym.webp')
+        image=base+'assets/icons/go-gym-original.png'
         # Idempotence: remove previous SEO tags before adding the current domain.
         text=re.sub(r'<link rel="canonical"[^>]*>', '', text)
-        text=re.sub(r'<meta property="og:(?:url|image)"[^>]*>', '', text)
+        text=re.sub(r'<meta property="og:(?:url|image|image:alt)"[^>]*>', '', text)
         text=re.sub(r'<meta name="twitter:image"[^>]*>', '', text)
-        insert=f'<link rel="canonical" href="{url}"><meta property="og:url" content="{url}"><meta property="og:image" content="{image}"><meta name="twitter:image" content="{image}">'
+        insert=f'<link rel="canonical" href="{url}"><meta property="og:url" content="{url}"><meta property="og:image" content="{image}"><meta property="og:image:alt" content="Logo officiel GO GYM MSAKEN"><meta name="twitter:image" content="{image}">'
         text=text.replace('</head>',insert+'</head>',1)
         def fix_ld(m):
             try:
                 obj=json.loads(m.group(1))
-                if obj.get('@type')=='ExerciseGym': obj['url']=base;obj['image']=base+'assets/images/facade-go-gym.webp'
+                if obj.get('@type')=='ExerciseGym': obj['url']=base;obj['image']=base+'assets/images/facade-go-gym.webp';obj['logo']=base+'assets/icons/go-gym-original.png'
                 if obj.get('@type')=='BlogPosting': obj['mainEntityOfPage']=url
                 return '<script type="application/ld+json">'+json.dumps(obj,ensure_ascii=False)+'</script>'
             except (ValueError,TypeError):return m.group(0)

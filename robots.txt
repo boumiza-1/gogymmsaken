@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-# Ajoutez le chemin du sitemap après configuration de votre domaine.
+Sitemap: https://gogymmsaken.com/sitemap.xml
